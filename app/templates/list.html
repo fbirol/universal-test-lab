@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Universal Test Lab | Kayıt Listesi</title>
+</head>
+<body>
+    <h2>Kayıt Listesi</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>İsim</th>
+            <th>E-posta</th>
+        </tr>
+        {% for record in records %}
+        <tr>
+            <td>{{ record.id }}</td>
+            <td>{{ record.name }}</td>
+            <td>{{ record.email }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <a href="/login">Çıkış</a>
+</body>
+</html>

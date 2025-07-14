@@ -1,10 +1,11 @@
-import sys
-import os
+import sys, os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
 from pytest_bdd import scenarios, given, when, then, parsers
 from tests.pages.login_page import LoginPage
+from tests.pages.list_page import ListPage
 
-scenarios('../features/login.feature')
+scenarios('../features/list.feature')
 
 @given("login ekranındayım")
 def go_to_login(page):
@@ -16,18 +17,13 @@ def valid_login(page):
     login_page = LoginPage(page)
     login_page.login("furkan", "1234")
 
-@when(parsers.parse('kullanıcı adı "{username}" ve yanlış şifre girilir'))
-def invalid_login(page, username):
-    login_page = LoginPage(page)
-    login_page.login(username, "yanlis_sifre")
-
 @then(parsers.parse('sayfa başlığı "{title}" olan bir ekranı görürüm'))
 def page_header_is(page, title):
     actual = page.locator("h2").inner_text()
     assert actual == title, f'Beklenen başlık "{title}", görünen "{actual}"'
 
-@then(parsers.parse('uyarı mesajı "{warning}" gösterilir'))
-def warning_message(page, warning):
-    login_page = LoginPage(page)
-    actual = login_page.get_error_message()
-    assert warning in actual, f'Beklenen uyarı "{warning}", görünen "{actual}"'
+@then(parsers.parse('listede "{kayit}" kaydı bulunur'))
+def kayit_var_mi(page, kayit):
+    list_page = ListPage(page)
+    rows = ''.join(list_page.get_table_rows())  # satırları birleştir
+    assert kayit in rows, f'Kayıt "{kayit}" tablo satırlarında yok!'
