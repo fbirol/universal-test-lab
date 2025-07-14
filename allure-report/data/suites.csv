@@ -1,0 +1,3 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Mon Jul 14 17:58:50 TRT 2025","Mon Jul 14 17:58:57 TRT 2025","6629","tests.steps","test_login_steps","","","","test_kullanıcı_doğru_bilgiyle_giriş_yaparsa_ana_sayfaya_ulaşır","D:\Personal\_Project\2025\universal-test-lab\tests\features\login.feature: Kullanıcı doğru bilgiyle giriş yaparsa ana sayfaya ulaşır"
+"passed","Mon Jul 14 17:58:57 TRT 2025","Mon Jul 14 17:58:58 TRT 2025","966","tests.steps","test_login_steps","","","","test_kullanıcı_hatalı_şifreyle_giriş_denediğinde_uyarı_alır","D:\Personal\_Project\2025\universal-test-lab\tests\features\login.feature: Kullanıcı hatalı şifreyle giriş denediğinde uyarı alır"
