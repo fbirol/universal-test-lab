@@ -1,0 +1,32 @@
+Kalan kayitlar: [<Record 2>]
+List page after delete: <!DOCTYPE html>
+<html>
+<head>
+    <title>Universal Test Lab | Kayıt Listesi</title>
+</head>
+<body>
+    <a href="/add">Yeni Kayıt Ekle</a>
+    <h2>Kayıt Listesi</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <th>İsim</th>
+            <th>E-posta</th>
+            <th>İşlem</th>
+        </tr>
+        
+        <tr>
+            <td>2</td>
+            <td>Fatma Yılmaz</td>
+            <td>fatma@example.com</td>
+            <td>
+                <form action="/delete/2" method="post" style="display:inline;">
+                    <button type="submit">Sil</button>
+                </form>
+            </td>
+        </tr>
+        
+    </table>
+    <a href="/login">Çıkış</a>
+</body>
+</html>
