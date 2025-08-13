@@ -1,1 +1,0 @@
-DEBUG-list rows:  ID	İsim	E-posta	İşlem1	Ali Veli	ali@example.com	Sil2	Fatma Yılmaz	fatma@example.com	Sil3	Mehmet Tester	mehmet@test.com	Sil
