@@ -3,7 +3,6 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-import pytest
 from faker import Faker
 from pytest_bdd import given, parsers, scenarios, then, when
 
@@ -58,7 +57,7 @@ def warning_message(page, warning):
     try:
         locator.wait_for(state="visible", timeout=2000)
         text = locator.inner_text()
-    except:
+    except Exception:
         text = ""
     assert warning in text, f'Beklenen uyarı "{warning}", görünen "{text}"'
 

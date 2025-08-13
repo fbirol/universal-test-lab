@@ -3,7 +3,6 @@ import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-import pytest
 from faker import Faker
 from pytest_bdd import given, parsers, scenarios, then, when
 

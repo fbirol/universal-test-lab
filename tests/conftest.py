@@ -24,8 +24,6 @@ def setup_test_db():
     # TEST BAŞLANGICINDA SADECE BİR KEZ sil-seed-yap
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
-    from app.main import Record, app, db
-
     with app.app_context():
         db.create_all()
         db.session.add(Record(name="Ali Veli", email="ali@example.com"))

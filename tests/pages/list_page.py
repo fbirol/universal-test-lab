@@ -17,5 +17,5 @@ class ListPage:
         for i in range(rows.count()):
             row_text = rows.nth(i).inner_text()
             if name in row_text:
-                self.page.locator(f"table tr:nth-child({i+1}) button").click()
+                self.page.locator(f"table tr:nth-child({i + 1}) button").click()
                 break
