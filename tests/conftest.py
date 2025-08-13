@@ -6,6 +6,7 @@ import time
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.main import app, db, Record
+from tests.factories import fake_record
 
 # DB dosyasının yolunu sabit tut
 DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "app", "instance", "universal_test_lab.db"))
@@ -44,15 +45,22 @@ def page(browser):
     yield page
     page.close()
 
+@pytest.fixture
+def context():
+    return {}
+
 @pytest.fixture()
-def client():
+def client_and_records():
     app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'  # her test için memory’de yeni DB!
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    added_records = []
     with app.app_context():
-        db.drop_all()
         db.create_all()
-        db.session.add(Record(name="Ali Veli", email="ali@example.com"))
-        db.session.add(Record(name="Fatma Yılmaz", email="fatma@example.com"))
-        db.session.commit()
+        for _ in range(2):
+            rec = fake_record()
+            record_obj = Record(**rec)
+            db.session.add(record_obj)
+            db.session.commit()
+            added_records.append(record_obj)
         with app.test_client() as client:
-            yield client
+            yield client, added_records

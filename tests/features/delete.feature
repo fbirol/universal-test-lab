@@ -1,8 +1,9 @@
 Feature: Kayıt silme
 
-    Scenario: Kullanıcı listeden bir kaydı siler
+    Scenario: Kullanıcı dinamik bir kaydı ekler ve siler
         Given login ekranındayım
         When kullanıcı adı ve şifre doğru girilir
-        Then listede "Ali Veli" kaydı bulunur
-        When "Ali Veli" kaydını silerim
-        Then listede "Ali Veli" kaydı bulunmaz
+        When bir kayıt eklerim
+        Then listede kayıt bulunur
+        When kaydı silerim
+        Then listede kayıt bulunmaz

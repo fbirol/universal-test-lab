@@ -1,14 +1,19 @@
 import sys
 import os
-import re
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 from pytest_bdd import scenarios, given, when, then, parsers
+from faker import Faker
+import pytest
+
 from tests.pages.login_page import LoginPage
 from tests.pages.list_page import ListPage
 from tests.pages.add_page import AddPage
 
+fake = Faker()
+
 scenarios('../features/add.feature')
+
 
 @given("login ekranındayım")
 def go_to_login(page):
@@ -25,8 +30,16 @@ def click_add_link(page, link):
     page.click('a[href="/add"]')
 
 @when(parsers.re(r'isim olarak "(?P<name>.*)" ve e-posta olarak "(?P<email>.*)" girerim ve kaydederim'))
-def add_record(page, name, email):
-    from tests.pages.add_page import AddPage
+def add_record(page, context, name, email):
+    # Eğer name ve email boş DEĞİLSE → faker ile dinamik doldur!
+    if not name or not email:
+        # Negative case: Boş bırakılmalı
+        pass
+    else:
+        name = fake.name()
+        email = fake.email()
+    context['test_name'] = name
+    context['test_email'] = email
     add_page = AddPage(page)
     add_page.add_new_record(name, email)
 
@@ -46,7 +59,9 @@ def see_list(page):
     assert list_page.is_on_list_page()
 
 @then(parsers.parse('listede "{kayit}" kaydı bulunur'))
-def kayit_var_mi(page, kayit):
+def kayit_var_mi(page, context, kayit):
+    # Eğer kayit step’e string ile geldiyse faker context’iyle overwrite et!
+    name = context.get('test_name', kayit)
     list_page = ListPage(page)
     rows = ''.join(list_page.get_table_rows())
-    assert kayit in rows, f'Kayıt "{kayit}" tablo satırlarında yok!'
+    assert name in rows, f'Kayıt "{name}" tablo satırlarında yok!'
