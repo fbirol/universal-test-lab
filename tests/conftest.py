@@ -3,13 +3,19 @@ import pytest
 from playwright.sync_api import sync_playwright
 import subprocess
 import time
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from app.main import app, db, Record
 from tests.factories import fake_record
 
 # DB dosyasının yolunu sabit tut
-DB_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "app", "instance", "universal_test_lab.db"))
+DB_PATH = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__), "..", "app", "instance", "universal_test_lab.db"
+    )
+)
+
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():
@@ -17,11 +23,13 @@ def setup_test_db():
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
     from app.main import app, db, Record
+
     with app.app_context():
         db.create_all()
         db.session.add(Record(name="Ali Veli", email="ali@example.com"))
         db.session.add(Record(name="Fatma Yılmaz", email="fatma@example.com"))
         db.session.commit()
+
 
 @pytest.fixture(scope="session", autouse=True)
 def start_flask():
@@ -31,7 +39,8 @@ def start_flask():
     yield
     proc.terminate()
     proc.wait()
-    
+
+
 @pytest.fixture(scope="session")
 def browser():
     with sync_playwright() as p:
@@ -39,20 +48,23 @@ def browser():
         yield browser
         browser.close()
 
+
 @pytest.fixture
 def page(browser):
     page = browser.new_page()
     yield page
     page.close()
 
+
 @pytest.fixture
 def context():
     return {}
 
+
 @pytest.fixture()
 def client_and_records():
-    app.config['TESTING'] = True
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+    app.config["TESTING"] = True
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
     added_records = []
     with app.app_context():
         db.create_all()

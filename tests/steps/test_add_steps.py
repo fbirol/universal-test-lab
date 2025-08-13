@@ -1,6 +1,7 @@
 import sys
 import os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
 from pytest_bdd import scenarios, given, when, then, parsers
 from faker import Faker
@@ -12,7 +13,7 @@ from tests.pages.add_page import AddPage
 
 fake = Faker()
 
-scenarios('../features/add.feature')
+scenarios("../features/add.feature")
 
 
 @given("login ekranındayım")
@@ -20,16 +21,23 @@ def go_to_login(page):
     login_page = LoginPage(page)
     login_page.navigate()
 
+
 @when("kullanıcı adı ve şifre doğru girilir")
 def valid_login(page):
     login_page = LoginPage(page)
     login_page.login("furkan", "1234")
 
+
 @when(parsers.parse('"{link}" bağlantısına tıklarım'))
 def click_add_link(page, link):
     page.click('a[href="/add"]')
 
-@when(parsers.re(r'isim olarak "(?P<name>.*)" ve e-posta olarak "(?P<email>.*)" girerim ve kaydederim'))
+
+@when(
+    parsers.re(
+        r'isim olarak "(?P<name>.*)" ve e-posta olarak "(?P<email>.*)" girerim ve kaydederim'
+    )
+)
 def add_record(page, context, name, email):
     # Eğer name ve email boş DEĞİLSE → faker ile dinamik doldur!
     if not name or not email:
@@ -38,14 +46,15 @@ def add_record(page, context, name, email):
     else:
         name = fake.name()
         email = fake.email()
-    context['test_name'] = name
-    context['test_email'] = email
+    context["test_name"] = name
+    context["test_email"] = email
     add_page = AddPage(page)
     add_page.add_new_record(name, email)
 
+
 @then(parsers.parse('uyarı mesajı "{warning}" gösterilir'))
 def warning_message(page, warning):
-    locator = page.locator('p')
+    locator = page.locator("p")
     try:
         locator.wait_for(state="visible", timeout=2000)
         text = locator.inner_text()
@@ -53,15 +62,17 @@ def warning_message(page, warning):
         text = ""
     assert warning in text, f'Beklenen uyarı "{warning}", görünen "{text}"'
 
+
 @then("kayıt listesi ekranda görüntülenir")
 def see_list(page):
     list_page = ListPage(page)
     assert list_page.is_on_list_page()
 
+
 @then(parsers.parse('listede "{kayit}" kaydı bulunur'))
 def kayit_var_mi(page, context, kayit):
     # Eğer kayit step’e string ile geldiyse faker context’iyle overwrite et!
-    name = context.get('test_name', kayit)
+    name = context.get("test_name", kayit)
     list_page = ListPage(page)
-    rows = ''.join(list_page.get_table_rows())
+    rows = "".join(list_page.get_table_rows())
     assert name in rows, f'Kayıt "{name}" tablo satırlarında yok!'
