@@ -45,6 +45,26 @@ jobs:
       - name: Check code lint (Flake8)
         run: flake8 .
 
+      - name: Start Flask server in background
+        run: |
+          cd app
+          nohup python main.py &
+          cd ..
+          sleep 6
+
+      - name: Run Locust load test
+        run: |
+          pip install locust faker
+          locust -f locustfile.py --host=http://127.0.0.1:5000 --headless -u 8 -r 2 -t30s --csv locust-result
+
+      - name: Validate Locust test threshold (max 5 failures allowed)
+        run: |
+          FAILS=$(cat locust-result_stats.csv | grep Aggregated | awk -F',' '{print $5}')
+          if (( FAILS > 5 )); then
+              echo "::error ::Too many failures ($FAILS) during load test"
+              exit 1
+          fi
+
       - name: Run all tests and generate Allure results
         run: pytest --alluredir=allure-results
 
