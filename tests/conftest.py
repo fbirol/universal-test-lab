@@ -1,12 +1,14 @@
-import os, sys
+import os
+import subprocess
+import sys
+import time
+
 import pytest
 from playwright.sync_api import sync_playwright
-import subprocess
-import time
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-from app.main import app, db, Record
+from app.main import Record, app, db
 from tests.factories import fake_record
 
 # DB dosyasının yolunu sabit tut
@@ -22,7 +24,7 @@ def setup_test_db():
     # TEST BAŞLANGICINDA SADECE BİR KEZ sil-seed-yap
     if os.path.exists(DB_PATH):
         os.remove(DB_PATH)
-    from app.main import app, db, Record
+    from app.main import Record, app, db
 
     with app.app_context():
         db.create_all()

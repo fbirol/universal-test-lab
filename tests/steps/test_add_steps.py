@@ -1,15 +1,15 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 
-from pytest_bdd import scenarios, given, when, then, parsers
-from faker import Faker
 import pytest
+from faker import Faker
+from pytest_bdd import given, parsers, scenarios, then, when
 
-from tests.pages.login_page import LoginPage
-from tests.pages.list_page import ListPage
 from tests.pages.add_page import AddPage
+from tests.pages.list_page import ListPage
+from tests.pages.login_page import LoginPage
 
 fake = Faker()
 

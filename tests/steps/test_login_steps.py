@@ -1,8 +1,9 @@
-import sys
 import os
+import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
-from pytest_bdd import scenarios, given, when, then, parsers
+from pytest_bdd import given, parsers, scenarios, then, when
+
 from tests.pages.login_page import LoginPage
 
 scenarios("../features/login.feature")
