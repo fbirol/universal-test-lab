@@ -1,0 +1,11 @@
+flask
+pytest 
+pytest-bdd 
+playwright 
+allure-pytest
+flask_sqlalchemy
+Faker
+black
+isort
+flake8
+locust

@@ -1,0 +1,53 @@
+# Python bytecode ve derleme dosyaları
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Sanal ortam klasörleri
+venv/
+ENV/
+env/
+.venv/
+
+# IDE/editor dosyaları
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Test çıktıları ve rapor klasörleri
+allure-results/
+allure-report/
+htmlcov/
+.coverage
+*.log
+
+# OS-specific dosya ve çöpler
+.DS_Store
+Thumbs.db
+
+# Pytest cache
+.pytest_cache/
+
+# Pipenv, poetry gibi araçlar
+Pipfile.lock
+Pipfile
+poetry.lock
+
+# Docker Build cache/config
+**/docker-compose.override.yml
+
+# Her türlü kişisel config ve geçici dosya
+*.bak
+*.swp
+*.tmp
+
+# Git ile ilgili yanlışlıkla eklenen ana/remote repo dosyaları
+.gitmodules
+*.orig
+
+# NodeJS (frontend eklersen)
+node_modules/
+npm-debug.log
+yarn-error.log
