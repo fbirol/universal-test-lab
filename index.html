@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Universal Test Lab - QA Dashboard</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      background: #f7fafe;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0; padding: 0;
+      color: #23395d;
+    }
+    h1 {
+      margin-top: 32px;
+      font-size: 2.2em;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: 0.02em;
+      color: #234375;
+      text-shadow: 0 2px 16px rgba(80,140,220,0.06);
+    }
+    .dashboard {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+      margin: 48px auto 24px;
+      max-width: 1080px;
+    }
+    .card {
+      background: #fff;
+      box-shadow: 0 4px 24px rgba(47,101,183,0.11);
+      border-radius: 18px;
+      padding: 32px 24px 24px 24px;
+      min-width: 290px;
+      max-width: 350px;
+      flex: 1;
+      transition: 0.15s box-shadow;
+      position: relative;
+      border: 2px solid #eaf0fa;
+    }
+    .card:hover {
+      box-shadow: 0 8px 32px rgba(47,101,183,0.18);
+      border-color: #5981e7;
+    }
+    .card h2 { margin-top: 4px; font-size: 1.28em; margin-bottom: 18px; }
+    .stats { font-size: 1.12em; margin-bottom: 8px; }
+    .stats strong { color: #344ccc; }
+    .pass { color: #4CAF50; font-weight: 600; }
+    .fail { color: #F44336; font-weight: 600; }
+    .badge {
+      display:inline-block; background:#efefef; color:#234;
+      border-radius:7px; padding:2px 10px; font-size:0.98em;
+      margin-right:7px;
+    }
+    .card a {
+      display: inline-block; margin-top: 10px; padding: 7px 18px;
+      background: linear-gradient(90deg,#5e9cff 35%,#59c4ec 80%);
+      color: #fff; border-radius: 8px; text-decoration: none;
+      font-weight: 500; font-size: 1em;
+      box-shadow: 0 2px 8px rgba(47,101,183,0.08);
+      transition:0.2s background;
+    }
+    .card a:hover { background: linear-gradient(90deg,#225ae4 35%,#04afee 80%); }
+    .mini-graph {
+      margin: 14px auto 4px;
+      width: 220px; height: 75px;
+    }
+    @media (max-width: 900px) {
+      .dashboard { flex-direction: column; align-items: center; }
+      .card { max-width: 400px; min-width: 260px; }
+    }
+    .footer {
+      text-align:center; margin: 40px 0 20px;
+      color: rgba(120, 150, 181, 0.85);
+      font-size: 0.99em;
+      font-weight: 400;
+    }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h1>Universal Test Lab - QA Dashboard</h1>
+  <div class="dashboard">
+    <!-- Allure Card -->
+    <div class="card" id="allure">
+      <h2>🧪 Allure Feature Tests</h2>
+      <div class="stats">
+        Total: <strong>163</strong> |
+        <span class="pass">Pass: 152</span>
+        <span class="fail">Fail: 11</span>
+      </div>
+      <!-- Mini Graph (Demo Data) -->
+      <canvas class="mini-graph" id="allureGraph"></canvas>
+      <a href="allure-report/index.html" target="_blank">View Detailed Report</a>
+    </div>
+
+    <!-- Locust Card -->
+    <div class="card" id="locust">
+      <h2>⚡ Performance Tests (Locust)</h2>
+      <div class="stats">
+        Requests: <strong>6000</strong> |
+        <span class="pass">Success: 5840</span>
+        <span class="fail">Fail: 160</span>
+      </div>
+      <canvas class="mini-graph" id="locustGraph"></canvas>
+      <a href="locust-report.html" target="_blank">View Detailed Report</a>
+    </div>
+
+    <!-- Security Card -->
+    <div class="card" id="security">
+      <h2>🔒 Security Scan</h2>
+      <div class="stats">
+        Vulns: <strong>2</strong> |
+        <span class="badge" style="background:#f1706d;color:#fff">High: 0</span>
+        <span class="badge" style="background:#fab66b;color:#234">Medium: 1</span>
+        <span class="badge" style="background:#52d97b;color:#234">Low: 1</span>
+      </div>
+      <canvas class="mini-graph" id="securityGraph"></canvas>
+      <a href="security-report.html" target="_blank">View Detailed Report</a>
+    </div>
+  </div>
+  <div class="footer">
+    Powered by Universal Test Lab • Allure / Locust / GitHub Actions • 2025  
+  </div>
+  <!-- Demo JS for stats & graphs -->
+  <script>
+    // Allure mini trend: Pass (demo)
+    new Chart(document.getElementById('allureGraph').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['Run-5','Run-4','Run-3','Run-2','Run-1'],
+        datasets: [{
+          label: 'Pass',
+          data: [150, 151, 150, 152, 152],
+          borderColor: '#4caf50',
+          backgroundColor:'rgba(76,175,80,0.09)',
+          fill: true, tension:0.35
+        },{
+          label: 'Fail',
+          data: [10, 11, 13, 10, 11],
+          borderColor: '#f44336',
+          backgroundColor:'rgba(244,67,54,0.07)',
+          fill: true, tension:0.35
+        }]
+      },
+      options: {
+        plugins:{ legend: {display:false} },
+        scales: { x: {display:false}, y: {display:false} }
+      }
+    });
+    // Locust mini trend: Success/Fail (demo)
+    new Chart(document.getElementById('locustGraph').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Run-5','Run-4','Run-3','Run-2','Run-1'],
+        datasets: [{
+          label: 'Success',
+          data: [5300,5700,5600,5850,5840],
+          backgroundColor:'#5e9cff'
+        },{
+          label: 'Fail',
+          data: [130,120,150,150,160],
+          backgroundColor:'#f1706d'
+        }]
+      },
+      options: { plugins:{ legend: {display:false} }, scales: { x: {display:false}, y: {display:false} } }
+    });
+    // Security trend (demo)
+    new Chart(document.getElementById('securityGraph').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['-5','-4','-3','-2','-1'],
+        datasets: [{
+          label:'Medium',
+          data:[2,1,1,1,1],
+          borderColor:'#fab66b',
+          backgroundColor:'rgba(250,182,107,0.13)',
+          fill:true, tension:0.4
+        },{
+          label:'Low',
+          data:[3,2,2,2,1],
+          borderColor:'#52d97b',
+          backgroundColor:'rgba(82,217,123,0.07)',
+          fill:true, tension:0.3
+        }]
+      },
+      options: { plugins:{ legend:{display:false} }, scales:{x:{display:false}, y:{display:false}} }
+    });
+  </script>
+</body>
+</html>
