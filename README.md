@@ -82,9 +82,10 @@ flake8 .
     
 # QA Reports and Dashboards
 
+- [Dashboard](https://fbirol.github.io/universal-test-lab/index.html)  
 - [Allure Functional Test Report](https://fbirol.github.io/universal-test-lab/allure-report/index.html)  
 - [Locust Performance Test Report](https://fbirol.github.io/universal-test-lab/locust-report.html)
-
+[![codecov](https://codecov.io/gh/fbirol/universal-test-lab/branch/main/graph/badge.svg)](https://codecov.io/gh/fbirol/universal-test-lab)
 
 ## 🛠️ TODO
 

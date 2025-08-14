@@ -85,7 +85,29 @@ jobs:
         with:
           name: allure-report
           path: allure-report
-      
+          
+      - name: Run coverage analysis
+        run: |
+          pip install pytest-cov
+          pytest --cov=app --cov-report=xml --cov-report=term
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
+
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(awk -F'"' '/lines-covered/ {print $4}' coverage.xml)
+          if (( COVERAGE < 70 )); then
+              echo "::error ::Coverage too low ($COVERAGE%)"
+              exit 1
+          fi
+                          
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+          
       - name: Prepare deploy directory for GitHub Pages
         run: |
           mkdir -p site-build
