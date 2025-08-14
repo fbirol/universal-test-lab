@@ -45,7 +45,7 @@ jobs:
       - name: Check code lint (Flake8)
         run: flake8 .
 
-      - name: Start Flask server in background
+      - name: Start Flask server in background (for performance tests)
         run: |
           cd app
           nohup python main.py &
@@ -65,6 +65,9 @@ jobs:
               exit 1
           fi
 
+      - name: Stop Flask server (for performance tests)
+        run: pkill -f 'python main.py'
+        
       - name: Run all tests and generate Allure results
         run: pytest --alluredir=allure-results
 
