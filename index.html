@@ -1,34 +1,50 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="en">
-<head>
-    <meta charset="utf-8">
-    <title>Allure Report</title>
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    <link rel="stylesheet" type="text/css" href="plugin/screen-diff/styles.css">
-</head>
-<body>
-    <div id="alert"></div>
-    <div id="content">
-        <span class="spinner">
-            <span class="spinner__circle"></span>
-        </span>
+<h1 style="text-align: center; margin-top: 32px">Universal Test Lab - QA Dashboard</h1>
+  <div>
+    
+    <div>
+      <h2>🧪 Allure Feature Tests</h2>
+      <div>
+        Total: <strong>163</strong> | 
+        <span>Pass: 152</span>
+        <span>Fail: 11</span>
+      </div>
+      <div>[Trend Graph Placeholder]</div>
+      <div>
+        <a href="allure-report/index.html" target="_blank">View Report</a>
+      </div>
     </div>
-    <div id="popup"></div>
-    <script src="app.js"></script>
-    <script src="plugin/behaviors/index.js"></script>
-    <script src="plugin/packages/index.js"></script>
-    <script src="plugin/screen-diff/index.js"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FVWC4GKEYS"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-FVWC4GKEYS', {
-          'allureVersion': '2.28.0',
-          'reportUuid': '5c3f6cc2-7e88-4e44-8814-e82a9396ba73',
-          'single_file': false
-        });
-    </script>
-</body>
-</html>
+
+    
+    <div>
+      <h2>⚡ Performance Tests (Locust)</h2>
+      <div>
+        Total Req: <strong>6000</strong> | 
+        <span>Success: 5840</span>
+        <span>Fail: 160</span>
+      </div>
+      <div>[Trend Graph Placeholder]</div>
+      <div>
+        <a href="locust-report.html" target="_blank">View Report</a>
+      </div>
+    </div>
+
+    
+    <div>
+      <h2>🔒 Security Scan</h2>
+      <div>
+        Total Vulns: <strong>2</strong> | 
+        <span>High: 0</span>
+        <span>Medium: 1</span>
+        <span>Low: 1</span>
+      </div>
+      <div>[Trend Graph Placeholder]</div>
+      <div>
+        <a href="security-report.html" target="_blank">View Report</a>
+      </div>
+    </div>
+
+    
+  </div>
+  <div style="text-align: center; margin: 40px 0 20px; color: rgba(170, 170, 170, 1)">
+    <small>Powered by Universal Test Lab • Allure/Locust/GitHub Actions • CC BY 2025</small>
+  </div>
