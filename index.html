@@ -83,15 +83,21 @@
 <body>
   <h1>Universal Test Lab - QA Dashboard</h1>
   <div class="dashboard">
+    <!-- Coverage Card -->
+    <div class="card" id="coverage" style="background:#222; color:#fff;">
+      <h2>📊 Test Coverage</h2>
+      <div style="margin:14px 0;">
+        <a href="https://codecov.io/gh/fbirol/universal-test-lab" target="_blank" style="background:none;padding:0">
+          <img src="https://codecov.io/gh/fbirol/universal-test-lab/branch/main/graph/badge.svg" alt="coverage" style="vertical-align:middle;height:32px">
+        </a>
+      </div>
+      <a href="https://codecov.io/gh/fbirol/universal-test-lab" target="_blank">Go to Coverage Details</a>
+    </div>
+
     <!-- Allure Card -->
     <div class="card" id="allure">
       <h2>🧪 Allure Feature Tests</h2>
-      <div class="stats">
-        Total: <strong>163</strong> |
-        <span class="pass">Pass: 152</span>
-        <span class="fail">Fail: 11</span>
-      </div>
-      <!-- Mini Graph (Demo Data) -->
+      <div class="stats" id="allure-stats">Loading...</div>
       <canvas class="mini-graph" id="allureGraph"></canvas>
       <a href="allure-report/index.html" target="_blank">View Detailed Report</a>
     </div>
@@ -99,16 +105,12 @@
     <!-- Locust Card -->
     <div class="card" id="locust">
       <h2>⚡ Performance Tests (Locust)</h2>
-      <div class="stats">
-        Requests: <strong>6000</strong> |
-        <span class="pass">Success: 5840</span>
-        <span class="fail">Fail: 160</span>
-      </div>
+      <div class="stats" id="locust-stats">Loading...</div>
       <canvas class="mini-graph" id="locustGraph"></canvas>
       <a href="locust-report.html" target="_blank">View Detailed Report</a>
     </div>
 
-    <!-- Security Card -->
+    <!-- Security Card ... -->
     <div class="card" id="security">
       <h2>🔒 Security Scan</h2>
       <div class="stats">
@@ -121,72 +123,82 @@
       <a href="security-report.html" target="_blank">View Detailed Report</a>
     </div>
   </div>
-  <div class="footer">
-    Powered by Universal Test Lab • Allure / Locust / GitHub Actions • 2025  
-  </div>
-  <!-- Demo JS for stats & graphs -->
+
+  <div class="footer">Powered by Universal Test Lab • Allure / Locust / Codecov / GitHub Actions • 2025</div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
-    // Allure mini trend: Pass (demo)
-    new Chart(document.getElementById('allureGraph').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels: ['Run-5','Run-4','Run-3','Run-2','Run-1'],
-        datasets: [{
-          label: 'Pass',
-          data: [150, 151, 150, 152, 152],
-          borderColor: '#4caf50',
-          backgroundColor:'rgba(76,175,80,0.09)',
-          fill: true, tension:0.35
-        },{
-          label: 'Fail',
-          data: [10, 11, 13, 10, 11],
-          borderColor: '#f44336',
-          backgroundColor:'rgba(244,67,54,0.07)',
-          fill: true, tension:0.35
-        }]
-      },
-      options: {
-        plugins:{ legend: {display:false} },
-        scales: { x: {display:false}, y: {display:false} }
-      }
-    });
-    // Locust mini trend: Success/Fail (demo)
-    new Chart(document.getElementById('locustGraph').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels: ['Run-5','Run-4','Run-3','Run-2','Run-1'],
-        datasets: [{
-          label: 'Success',
-          data: [5300,5700,5600,5850,5840],
-          backgroundColor:'#5e9cff'
-        },{
-          label: 'Fail',
-          data: [130,120,150,150,160],
-          backgroundColor:'#f1706d'
-        }]
-      },
-      options: { plugins:{ legend: {display:false} }, scales: { x: {display:false}, y: {display:false} } }
-    });
-    // Security trend (demo)
+    // ALLURE DATA
+    fetch('allure-report/widgets/summary.json')
+      .then(r=>r.json())
+      .then(data=>{
+        let total=0, passed=0, failed=0;
+        data.items.forEach(item=>{
+          total += item.statistic.total;
+          passed += item.statistic.passed;
+          failed += item.statistic.failed;
+        });
+        document.getElementById('allure-stats').innerHTML =
+          `Total: <strong>${total}</strong> |
+           <span class="pass">Pass: ${passed}</span>
+           <span class="fail">Fail: ${failed}</span>`;
+        // Grafik (demo - tüm runlar tek değerle)
+        new Chart(document.getElementById('allureGraph').getContext('2d'), {
+          type: 'line',
+          data: {
+            labels: Array(5).fill('').map((_,i)=>`Run-${5-i}`),
+            datasets: [{
+              label:'Passed', data:Array(5).fill(passed),
+              borderColor:'#4caf50', backgroundColor:'rgba(76,175,80,0.07)', fill:true, tension:.25
+            },{
+              label:'Failed', data:Array(5).fill(failed),
+              borderColor:'#f44336', backgroundColor:'rgba(244,67,54,0.07)', fill:true, tension:.25
+            }]
+          },
+          options:{plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}
+        });
+      });
+
+    // LOCUST DATA
+    fetch('locust-result_stats.csv')
+      .then(res=>res.text())
+      .then(csv=>{
+        let lines = csv.split('\n');
+        let agg = lines.find(l=>l.includes('Aggregated'));
+        if(agg){
+          let cols = agg.split(',');
+          let requests = parseInt(cols[1]);
+          let fails    = parseInt(cols[5]);
+          let success  = requests - fails;
+          document.getElementById('locust-stats').innerHTML =
+           `Requests: <strong>${requests}</strong> |
+            <span class="pass">Success: ${success}</span>
+            <span class="fail">Fail: ${fails}</span>`;
+          new Chart(document.getElementById('locustGraph').getContext('2d'), {
+            type: 'bar',
+            data: {
+              labels: Array(5).fill('').map((_,i)=>`Run-${5-i}`),
+              datasets: [{
+                label:'Success', data:Array(5).fill(success), backgroundColor:'#5e9cff'
+              },{
+                label:'Fail',    data:Array(5).fill(fails),   backgroundColor:'#f1706d'
+              }]
+            },
+            options:{plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}
+          });
+        }
+      });
+    // Security kartı demo grafikleri (gerekirse ekle)
     new Chart(document.getElementById('securityGraph').getContext('2d'), {
       type: 'line',
-      data: {
-        labels: ['-5','-4','-3','-2','-1'],
-        datasets: [{
-          label:'Medium',
-          data:[2,1,1,1,1],
-          borderColor:'#fab66b',
-          backgroundColor:'rgba(250,182,107,0.13)',
-          fill:true, tension:0.4
+      data: {labels:['-5','-4','-3','-2','-1'],
+        datasets:[{
+          label:'Medium',data:[2,1,1,1,1],borderColor:'#fab66b',
+          backgroundColor:'rgba(250,182,107,0.13)',fill:true,tension:0.4
         },{
-          label:'Low',
-          data:[3,2,2,2,1],
-          borderColor:'#52d97b',
-          backgroundColor:'rgba(82,217,123,0.07)',
-          fill:true, tension:0.3
-        }]
-      },
-      options: { plugins:{ legend:{display:false} }, scales:{x:{display:false}, y:{display:false}} }
+          label:'Low',data:[3,2,2,2,1],borderColor:'#52d97b',
+          backgroundColor:'rgba(82,217,123,0.07)',fill:true,tension:0.3
+        }]},
+      options:{plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}
     });
   </script>
 </body>
