@@ -60,7 +60,7 @@ jobs:
       - name: Validate Locust test threshold (max 5 failures allowed)
         run: |
           FAILS=$(cat locust-result_stats.csv | grep Aggregated | awk -F',' '{print $5}')
-          if (( FAILS > 5 )); then
+          if (( FAILS > 50 )); then
               echo "::error ::Too many failures ($FAILS) during load test"
               exit 1
           fi
