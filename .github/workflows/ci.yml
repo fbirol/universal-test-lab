@@ -63,13 +63,6 @@ jobs:
           name: locust-report
           path: locust-report.html
 
-      - name: Deploy Locust HTML report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./
-
       - name: Validate Locust test threshold (max 5 failures allowed)
         run: |
           FAILS=$(cat locust-result_stats.csv | grep Aggregated | awk -F',' '{print $5}')
@@ -93,9 +86,16 @@ jobs:
           name: allure-report
           path: allure-report
       
-      - name: Deploy Allure report to GitHub Pages 🚀
+      - name: Prepare deploy directory for GitHub Pages
+        run: |
+          mkdir -p site-build
+          cp -r allure-report site-build/
+          cp locust-report.html site-build/
+          cp index.html site-build/     
+
+      - name: Deploy all QA reports to GitHub Pages 🚀
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./allure-report
+          publish_dir: ./site-build
