@@ -79,6 +79,13 @@ flake8 .
 
 ---
 
+    
+# QA Reports and Dashboards
+
+- [Allure Functional Test Report](https://fbirol.github.io/universal-test-lab/allure-report/index.html)  
+- [Locust Performance Test Report](https://fbirol.github.io/universal-test-lab/locust-report.html)
+
+
 ## 🛠️ TODO
 
 - [ ] Gelişmiş Load & Performance Testleri (Locust, k6 entegrasyonu)

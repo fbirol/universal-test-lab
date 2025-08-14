@@ -52,10 +52,23 @@ jobs:
           cd ..
           sleep 6
 
-      - name: Run Locust load test
+      - name: Run Locust load test and HTML report
         run: |
           pip install locust faker
-          locust -f locustfile.py --host=http://127.0.0.1:5000 --headless -u 8 -r 2 -t30s --csv locust-result
+          locust -f locustfile.py --host=http://127.0.0.1:5000 --headless -u 8 -r 2 -t30s --html locust-report.html --csv locust-result
+
+      - name: Upload Locust HTML report
+        uses: actions/upload-artifact@v4
+        with:
+          name: locust-report
+          path: locust-report.html
+
+      - name: Deploy Locust HTML report to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./
 
       - name: Validate Locust test threshold (max 5 failures allowed)
         run: |
